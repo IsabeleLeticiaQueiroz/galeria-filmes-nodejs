@@ -1,0 +1,19 @@
+{
+  "name": "galeria-filmes",
+  "version": "1.0.0",
+  "description": "atividade 2 bimestre",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Isabele Queiroz",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.1",
+    "express-flash": "^0.0.2",
+    "express-session": "^1.18.1",
+    "mysql2": "^3.11.4",
+    "sequelize": "^6.37.5"
+  },
+  "type": "module"
+}
