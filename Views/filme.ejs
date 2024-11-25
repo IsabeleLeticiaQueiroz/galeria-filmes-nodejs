@@ -1,0 +1,50 @@
+<%- include('partials/header.ejs') %>
+<%- include('partials/navbar1.ejs') %>
+
+<section data-bs-version="5.1" class="form5 cid-uvajJen2lI" id="form02-5">
+    <br><br><br><br>
+    
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 content-head">
+                <div class="mbr-section-head mb-5">
+                    <h3 class="mbr-section-title mbr-fonts-style align-center mb-0 display-2">
+                        <strong>Cadastre um filme!</strong></h3>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-8 mx-auto mbr-form">
+                <form action="/filme/new" method="POST" class="mbr-form form-with-styler" enctype="multipart/form-data" data-verified="">
+
+                    <div class="dragArea row">
+                        <!-- Primeira linha: dois campos lado a lado -->
+                        <div class="col-md-6 col-sm-12 form-group mb-3" data-for="titulo">
+                            <input type="text" name="titulo" placeholder="Título do Filme" data-form-field="titulo" class="form-control" value="" id="titulo-form02-5">
+                        </div>
+
+                        <div class="col-md-6 col-sm-12 form-group mb-3" data-for="ano">
+                            <input type="number" name="ano" placeholder="Ano de Lançamento" data-form-field="ano" class="form-control" value="" id="ano-form02-5">
+                        </div>
+
+                        <!-- Campo de upload de imagem: botão para selecionar imagem -->
+                        <div class="col-md-12 col-sm-12 form-group mb-3 btn btn-primary" data-for="imagem">
+                            <label for="imagem-form02-5" class="btn btn-default btn-block">
+                                Selecionar Imagem
+                            </label>
+                            <input type="file" name="imagem" id="imagem-form02-5" style="display: none;">
+                        </div>
+
+                        <!-- Botão de envio do formulário -->
+                        <div class="col-lg-12 col-md-12 col-sm-12 align-center mbr-section-btn">
+                            <button type="submit" class="btn btn-primary display-7">Cadastrar Filme</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<%- include('partials/footer.ejs') %>

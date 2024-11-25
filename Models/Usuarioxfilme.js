@@ -1,46 +1,26 @@
-import Sequelize from 'sequelize';
+import { DataTypes } from 'sequelize';
 import connection from '../Config/sequelize-config.js';
-import Usuarios from './Usuario.js';
-import Filmes from './Filme.js';
 
-const Usuariosxfilmes = connection.define('usuariosxfilmes', {
-    id_usuario_filme: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-    },
+const UsuarioXFilme = connection.define('Usuariosxfilmes', {
     id_usu: {
-        type: Sequelize.INTEGER,
+        type: DataTypes.INTEGER,
         references: {
-            model: 'usuarios',  // Nome da tabela de 'usuarios'
-            key: 'id_usu',      // Chave primária na tabela 'usuarios'
+            model: 'usuarios', // Nome da tabela de usuários
+            key: 'id_usu'
         },
-        allowNull: false,
+        onDelete: 'CASCADE',
     },
     id_filme: {
-        type: Sequelize.INTEGER,
+        type: DataTypes.INTEGER,
         references: {
-            model: 'filmes',    // Nome da tabela de 'filmes'
-            key: 'id_filme',    // Chave primária na tabela 'filmes'
+            model: 'filmes', // Nome da tabela de filmes
+            key: 'id_filme'
         },
-        allowNull: false,
-    },
+        onDelete: 'CASCADE',
+    }
+}, {
+    tableName: 'Usuariosxfilmes',  // Nome da tabela intermediária
+    timestamps: false,  // Não precisa de campos de timestamps aqui
 });
 
-// Definindo o relacionamento muitos-para-muitos com a tabela intermediária
-Usuarios.belongsToMany(Filmes, {
-    through: Usuariosxfilmes,  // Tabela intermediária
-    foreignKey: 'id_usu',      // A chave estrangeira na tabela 'usuariosxfilmes'
-    otherKey: 'id_filme',      // A chave estrangeira na tabela 'usuariosxfilmes' para 'filmes'
-});
-Filmes.belongsToMany(Usuarios, {
-    through: Usuariosxfilmes,  // Tabela intermediária
-    foreignKey: 'id_filme',    // A chave estrangeira na tabela 'usuariosxfilmes'
-    otherKey: 'id_usu',        // A chave estrangeira na tabela 'usuariosxfilmes' para 'usuarios'
-});
-
-// Sincronizando a tabela intermediária
-Usuariosxfilmes.sync({ force: false });
-
-export default Usuariosxfilmes;
+export default UsuarioXFilme;

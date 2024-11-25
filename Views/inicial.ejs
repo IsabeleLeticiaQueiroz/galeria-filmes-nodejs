@@ -1,0 +1,75 @@
+<%- include('partials/header.ejs') %>
+<%- include('partials/navbar2.ejs') %>
+
+<section data-bs-version="5.1" class="gallery1 mbr-gallery cid-uvajt483LZ" id="gallery01-3">
+    <br><br><br><br>
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-12 content-head">
+                <div class="mb-5">
+                    <h3 class="mbr-section-title mbr-fonts-style align-center m-0 display-2"><strong>Todos os filmes</strong></h3>
+                    <h4 class="mbr-section-subtitle mbr-fonts-style align-center mb-0 mt-4 display-7">Explore a coleção de filmes</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mbr-gallery">
+            <% if (filmes && filmes.length > 0) { %>
+                <% filmes.forEach(filme => { %>
+                    <div class="col-12 col-md-6 col-lg-3 item gallery-image">
+                        <div class="item-wrapper mb-3" data-toggle="modal" data-bs-toggle="modal" data-target="#uvap3vbEr7-modal" data-bs-target="#uvap3vbEr7-modal">
+                            <!-- Exibindo a imagem do filme -->
+                            <% if (filme.imagem) { %>
+                                <img class="w-100" src="<%= filme.imagem %>" alt="<%= filme.titulo %>" data-slide-to="<%= filme.id_filme %>" data-bs-slide-to="<%= filme.id_filme %>" data-target="#lb-uvap3vbEr7" data-bs-target="#lb-uvap3vbEr7">
+                            <% } else { %>
+                                <img class="w-100" src="/path/to/default-image.jpg" alt="<%= filme.titulo %>">
+                            <% } %>
+                            <div class="icon-wrapper">
+                                <span class="mobi-mbri mobi-mbri-search mbr-iconfont mbr-iconfont-btn"></span>
+                            </div>
+                        </div>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <div class="col-12">
+                    <p>Não há filmes cadastrados no momento. Por favor, adicione alguns filmes.</p>
+                </div>
+            <% } %>
+        </div>
+
+        <div class="modal mbr-slider" tabindex="-1" role="dialog" aria-hidden="true" id="uvap3vbEr7-modal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div class="carousel slide" data-pause="false" data-bs-pause="false" id="lb-uvap3vbEr7" data-interval="5000" data-bs-interval="5000">
+                            <div class="carousel-inner">
+                                <!-- Imagens em carrossel para visualização ampliada -->
+                                <% filmes.forEach((filme, index) => { %>
+                                    <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
+                                        <img class="d-block w-100" src="<%= filme.imagem || '/path/to/default-image.jpg' %>" alt="<%= filme.titulo %>">
+                                    </div>
+                                <% }) %>
+                            </div>
+                            <ol class="carousel-indicators">
+                                <% filmes.forEach((filme, index) => { %>
+                                    <li data-slide-to="<%= index %>" data-bs-slide-to="<%= index %>" class="<%= index === 0 ? 'active' : '' %>" data-target="#lb-uvap3vbEr7" data-bs-target="#lb-uvap3vbEr7"></li>
+                                <% }) %>
+                            </ol>
+                            <a role="button" href="" class="close" data-dismiss="modal" data-bs-dismiss="modal" aria-label="Close"></a>
+                            <a class="carousel-control-prev carousel-control" role="button" data-slide="prev" data-bs-slide="prev" href="#lb-uvap3vbEr7">
+                                <span class="mobi-mbri mobi-mbri-arrow-prev" aria-hidden="true"></span>
+                                <span class="sr-only visually-hidden">Previous</span>
+                            </a>
+                            <a class="carousel-control-next carousel-control" role="button" data-slide="next" data-bs-slide="next" href="#lb-uvap3vbEr7">
+                                <span class="mobi-mbri mobi-mbri-arrow-next" aria-hidden="true"></span>
+                                <span class="sr-only visually-hidden">Next</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<%- include('partials/footer.ejs') %>

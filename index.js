@@ -1,5 +1,6 @@
 import express from 'express';
 import connection from './Config/sequelize-config.js'
+import path from 'path';
 const app = express()
 
 //importar modelos
@@ -7,8 +8,13 @@ import Usuarios from './Models/Usuario.js';
 import Filmes from './Models/Filme.js';
 import Usuariosxfilmes from './Models/Usuarioxfilme.js';
 
-//importar controllers
+// Definir as associações
+import './Models/Usuarioxfilme.js';  
 
+//importar controllers
+import FilmesController from './Controllers/FilmesController.js';
+import UsuariosxfilmesController from './Controllers/UsuariosxfilmesController.js';
+import UsuariosController from './Controllers/UsuariosController.js';
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -35,10 +41,12 @@ app.use(
 app.use(flash());
 
 // Permite capturar dados vindos de formulários
-app.use('/Imgs', express.static('/Imgs'));
+app.use('/Imgs', express.static('Imgs'));
 
 //rotas dos controllers
-
+app.use("/", UsuariosController);
+app.use("/", FilmesController);
+app.use("/", UsuariosxfilmesController);
 
 // Realizando a conexão com o banco de dados
 connection.authenticate().then(() => {
@@ -49,15 +57,19 @@ connection.authenticate().then(() => {
     console.log("Banco criado");
     // Sincronizar tabelas
     return Promise.all([
-     //Usuarios.sync({ force: false }), 
-     //Filmes.sync({ force: false })
-     //Usuariosxfilmes.sync({ force: false })
-
-    ]);
+        Usuarios.sync({ force: false }), 
+        Filmes.sync({ force: false }),
+        Usuariosxfilmes.sync({ force: false })
+      ]);
 }).then(() => {
     console.log("Tabelas sincronizadas com sucesso");
 }).catch((error) => {
     console.log("Erro na conexão ou criação do banco:", error);
+});
+
+// Rota principal
+app.get("/", function(req, res) {
+    res.render("index");
 });
 
 //iniciando servidor

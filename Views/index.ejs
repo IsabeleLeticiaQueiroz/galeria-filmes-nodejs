@@ -1,0 +1,63 @@
+<%- include('partials/header.ejs') %>
+<%- include('partials/navbar1.ejs') %>
+
+<section data-bs-version="5.1" class="header18 cid-uvaj6LyB54" data-bg-video="https://vimeo.com/31315987" id="header18-1">
+    <div class="mbr-overlay" style="opacity: 0.5; background-color: rgb(0, 0, 0);"></div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="content-wrap col-12 col-md-12">
+                <h1 class="mbr-section-title mbr-fonts-style mbr-white mb-4 display-1">
+                    <strong>Venha se entreter!</strong>
+                </h1>
+                <p class="mbr-fonts-style mbr-text mbr-white mb-4 display-7">
+                    Seja bem-vindo a nossa galeria de filmes comunitária!
+                </p>
+                <div class="mbr-section-btn">
+                    <a class="btn btn-white-outline display-7" href="/cadastro">Quero participar!</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section data-bs-version="5.1" class="clients2 cid-uvajhwtQJw" id="clients02-2">
+    <div class="container-fluid">
+        <div class="row justify-content-center mb-5">
+            <div class="col-12 content-head">
+                <h3 class="mbr-section-title mbr-fonts-style align-center mb-0 display-2">
+                    <strong>Alguns dos nossos filmes</strong>
+                </h3>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <% if (filmes && filmes.length > 0) { %>
+                <% filmes.forEach(filme => { %>
+                    <div class="col-sm-6 card col-lg-3">
+                        <div class="card-wrap">
+                            <div class="content-wrap">
+                                <h5><%= filme.titulo %></h5>
+                                <!-- Certifique-se de que a imagem está sendo exibida corretamente -->
+                                <% if (filme.imagem) { %>
+                                    <img src="<%= filme.imagem %>" alt="<%= filme.titulo %>" />
+                                <% } else { %>
+                                    <img src="/path/to/default-image.jpg" alt="Imagem padrão" />
+                                <% } %>
+                                <div class="mbr-section-btn card-btn align-center">
+                                    <a class="btn btn-white display-7" href="/filme/<%= filme.id_filme %>">
+                                        Ver detalhes
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <div class="col-12">
+                    <p>Não há filmes cadastrados no momento. Por favor, adicione alguns filmes.</p>
+                </div>
+            <% } %>
+        </div>
+    </div>
+</section>
+
+<%- include('partials/footer.ejs') %>

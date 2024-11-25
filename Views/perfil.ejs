@@ -1,0 +1,60 @@
+<%- include('partials/header.ejs') %>
+<%- include('partials/navbar2.ejs') %>
+<section data-bs-version="5.1" class="start article2 cid-uvajANSXwJ" id="article02-4">
+	<br><br><br>
+
+	
+	
+
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-12 col-md-12 col-lg-6 image-wrapper">
+				<img class="w-100" src="assets/images/gallery03.jpg" alt="Mobirise Website Builder">
+			</div>
+			<div class="col-12 col-md-12 col-lg">
+				<div class="text-wrapper align-left">
+					<h1 class="mbr-section-title mbr-fonts-style mb-4 display-2"><strong><%= user.nome %></strong></h1>
+					<p class="mbr-text align-left mbr-fonts-style mb-4 display-7">
+					Email:<%= user.email %><br></p>
+					<div class="mbr-section-btn align-left mt-3"><a class="btn btn-danger display-7" href="/logout">Log out!</a></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section data-bs-version="5.1" class="clients2 cid-uvajhwtQJw" id="clients02-2">
+    <div class="container-fluid">
+        <div class="row justify-content-center mb-5">
+            <div class="col-12 content-head">
+                <h3 class="mbr-section-title mbr-fonts-style align-center mb-0 display-2">
+                    <strong>Meus filmes</strong>
+                </h3>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <% if (filmes && filmes.length > 0) { %>
+                <% filmes.forEach(filme => { %>
+                    <div class="col-sm-6 col-md-3">
+                        <div class="card">
+                            <!-- Se a imagem não existir, usa uma imagem padrão -->
+                            <img src="<%= filme.imagem || '/assets/images/default.jpg' %>" alt="<%= filme.titulo %>" class="card-img-top">
+                            <div class="card-body">
+                                <h5 class="card-title"><%= filme.titulo %></h5>
+                                <a href="/editar-filme/<%= filme.id_filme %>" class="btn btn-primary">Editar</a>
+                                <a href="/remover-filme/<%= filme.id_filme %>" class="btn btn-danger">Excluir</a>
+                            </div>
+                        </div>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <div class="col-12">
+                    <p>Você ainda não cadastrou filmes. Por favor, adicione alguns filmes.</p>
+                </div>
+            <% } %>
+        </div>
+    </div>
+</section>
+
+
+<%- include('partials/footer.ejs') %>
