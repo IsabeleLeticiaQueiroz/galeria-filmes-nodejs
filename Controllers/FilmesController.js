@@ -3,6 +3,7 @@ import multer from "multer";
 import path from "path";
 import { fileURLToPath } from 'url';
 import Filmes from "../Models/Filme.js";
+import Usuarios from "../Models/Usuario.js";
 import Usuariosxfilmes from "../Models/Usuarioxfilme.js";
 import flash from "connect-flash";
 
@@ -75,23 +76,6 @@ router.post("/filme/new", upload.single("imagem"), async (req, res) => {
     }
 });
 
-// Rota para exibir todos os filmes
-router.get("/inicial", async (req, res) => {
-    try {
-        const filmes = await Filmes.findAll();
-
-        res.render("inicial", {
-            filmes: filmes,
-            user: req.session.user,
-        });
-    } catch (error) {
-        console.log(error);
-        req.flash("error", "Erro ao carregar filmes. Tente novamente!");
-        res.redirect("/inicial");
-    }
-});
-
-
 
 // ROTA PARA INDEX
 router.get("/", async (req, res) => {
@@ -114,24 +98,49 @@ router.get("/", async (req, res) => {
     }
 });
 
-//ROTA PRA TODOS OS FILMES
+// ROTA PARA TODOS OS FILMES
 router.get("/inicial", async (req, res) => {
     try {
-        const filmes = await Filmes.findAll();
+        // Busca os relacionamentos de usuários com filmes
+        const relacionamentos = await Usuariosxfilmes.findAll();
 
+        // Monta a lista final de filmes com emails dos postadores
+        const filmesComUsuarios = [];
+
+        for (const rel of relacionamentos) {
+            // Busca o filme pelo ID
+            const filme = await Filmes.findOne({
+                where: { id_filme: rel.id_filme },
+            });
+
+            // Busca o usuário pelo ID
+            const usuario = await Usuarios.findOne({
+                where: { id_usu: rel.id_usu },
+                attributes: ['email'], // Busca apenas o email
+            });
+
+            if (filme && usuario) {
+                // Adiciona o filme com o email do postador
+                filmesComUsuarios.push({
+                    ...filme.toJSON(), // Converte o modelo para objeto puro
+                    emailPostador: usuario.email, // Adiciona o email
+                });
+            }
+        }
+
+        // Renderiza a view com os dados
         res.render("inicial", {
-            filmes: filmes,  
-            user: req.session.user,
+            filmes: filmesComUsuarios,
         });
     } catch (error) {
-        console.log(error);
+        console.error("Erro ao carregar filmes e usuários:", error);
         req.flash("error", "Erro ao carregar filmes. Tente novamente!");
         res.redirect("/inicial");
     }
 });
 
 
-// ROTA PARA EDITAR UM FILME (Somente filmes que o usuário criou)
+
 router.get("/editar-filme/:id_filme", async (req, res) => {
     const { id_filme } = req.params;
 
@@ -154,6 +163,7 @@ router.get("/editar-filme/:id_filme", async (req, res) => {
         }
 
         const filme = await Filmes.findByPk(id_filme);
+        console.log("Filme encontrado: ", filme); // Verifique se o filme está sendo encontrado
         res.render("editarFilme", {
             filme: filme,
             successMessage: req.flash("success"),
@@ -166,7 +176,8 @@ router.get("/editar-filme/:id_filme", async (req, res) => {
     }
 });
 
-// ROTA PARA ATUALIZAR UM FILME (Somente filmes que o usuário criou)
+
+// ROTA PARA ATUALIZAR UM FILME
 router.post("/atualizar-filme/:id_filme", async (req, res) => {
     const { id_filme } = req.params;
     const { titulo, ano, imagem } = req.body;
@@ -195,7 +206,7 @@ router.post("/atualizar-filme/:id_filme", async (req, res) => {
             filme.ano = ano;
             filme.imagem = imagem;
 
-            await filme.save(); // Atualiza o filme no banco de dados
+            await filme.save(); 
 
             req.flash("success", "Filme atualizado com sucesso!");
             res.redirect("/inicial");
@@ -209,5 +220,50 @@ router.post("/atualizar-filme/:id_filme", async (req, res) => {
         res.redirect("/inicial");
     }
 });
+
+// excluir filme 
+router.get("/excluir-filme/:id_filme", async (req, res) => {
+    const { id_filme } = req.params;
+
+    try {
+        if (!req.session.user) {
+            req.flash("error", "faca o login");
+            return res.redirect("/login");
+        }
+
+        const filmeAssociado = await Usuariosxfilmes.findOne({
+            where: {
+                id_usu: req.session.user.id,
+                id_filme: id_filme,
+            },
+        });
+
+        if (!filmeAssociado) {
+            req.flash("error", "usuario sem permissao");
+            return res.redirect("/inicial");
+        }
+
+        await Usuariosxfilmes.destroy({
+            where: {
+                id_usu: req.session.user.id,
+                id_filme: id_filme,
+            },
+        });
+
+        await Filmes.destroy({
+            where: {
+                id_filme: id_filme,
+            },
+        });
+
+        req.flash("success", "Filme excluído!");
+        res.redirect("/perfil");
+    } catch (error) {
+        console.error("Erro ao excluir filme!", error);
+        req.flash("error", "Erro ao excluir filme!");
+        res.redirect("/peril");
+    }
+});
+
 
 export default router;

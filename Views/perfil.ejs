@@ -1,5 +1,6 @@
 <%- include('partials/header.ejs') %>
 <%- include('partials/navbar2.ejs') %>
+
 <section data-bs-version="5.1" class="start article2 cid-uvajANSXwJ" id="article02-4">
 	<br><br><br>
 
@@ -36,23 +37,31 @@
             <% if (filmes && filmes.length > 0) { %>
                 <% filmes.forEach(filme => { %>
                     <div class="col-sm-6 col-md-3">
-                        <div class="card">
+                        <div class="card" style="background-color: white; border-radius: 12px; padding: 5px;"
                             <!-- Se a imagem não existir, usa uma imagem padrão -->
                             <img src="<%= filme.imagem || '/assets/images/default.jpg' %>" alt="<%= filme.titulo %>" class="card-img-top">
-                            <div class="card-body">
-                                <h5 class="card-title"><%= filme.titulo %></h5>
-                                <a href="/editar-filme/<%= filme.id_filme %>" class="btn btn-primary">Editar</a>
-                                <a href="/remover-filme/<%= filme.id_filme %>" class="btn btn-danger">Excluir</a>
-                            </div>
+                            
+                                <div class="card-body" >
+                                    <h5 class="card-title"><%= filme.titulo %> - <%=filme.ano %> </h5>
+                                    <div class="d-flex justify-content-start" style="gap: 10px;">
+                                        <a href="/editar-filme/<%= filme.id_filme %>" style="background-color: yellow; padding: 10px; border-radius: 8px; display: inline-block;">
+                                            <img src="/Imgs/pencil-square.svg" alt="Editar" style="width: 20px; height: 20px;">
+                                        </a>
+                                        <a href="/excluir-filme/<%= filme.id_filme %>" style="background-color: red; padding: 10px; border-radius: 8px; display: inline-block;">
+                                            <img src="/Imgs/trash-fill.svg" alt="Excluir" style="width: 20px; height: 20px;">
+                                        </a>
+                                    </div>
+                                </div>
+                           
+                            
                         </div>
                     </div>
                 <% }) %>
             <% } else { %>
-                <div class="col-12">
-                    <p>Você ainda não cadastrou filmes. Por favor, adicione alguns filmes.</p>
-                </div>
+                <p>Não há filmes disponíveis.</p>
             <% } %>
         </div>
+
     </div>
 </section>
 

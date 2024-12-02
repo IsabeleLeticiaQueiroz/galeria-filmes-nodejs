@@ -33,22 +33,37 @@
             <% if (filmes && filmes.length > 0) { %>
                 <% filmes.forEach(filme => { %>
                     <div class="col-sm-6 card col-lg-3">
-                        <div class="card-wrap">
-                            <div class="content-wrap">
-                                <h5><%= filme.titulo %></h5>
-                                <!-- Certifique-se de que a imagem está sendo exibida corretamente -->
+                        <div class="card-wrap" style="position: relative; width: 100%; overflow: hidden; text-align: center;">
+                            <div class="content-wrap" style="position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                           
                                 <% if (filme.imagem) { %>
-                                    <img src="<%= filme.imagem %>" alt="<%= filme.titulo %>" />
+                                    <img src="<%= filme.imagem %>" alt="<%= filme.titulo %>" style="width: 100%; height: auto; object-fit: cover; display: block;"/>
                                 <% } else { %>
-                                    <img src="/path/to/default-image.jpg" alt="Imagem padrão" />
+                                    <img src="/path/to/Avengers_Endgame.jpg" alt="Imagem padrão" />
                                 <% } %>
-                                <div class="mbr-section-btn card-btn align-center">
-                                    <a class="btn btn-white display-7" href="/filme/<%= filme.id_filme %>">
-                                        Ver detalhes
-                                    </a>
+                                
+                                <div class="mbr-section-btn card-btn align-center" style="position: absolute;
+                                    top: 50%;
+                                    left: 50%;
+                                    transform: translate(-50%, -50%); /* Centraliza o texto no meio */
+                                    background-color: rgba(0, 0, 0, 0.5);
+                                    color: white;
+                                    padding: 10px 20px;
+                                    border-radius: 5px;
+                                    text-align: center;">
+                                
+                                    <h5 style="margin: 0;
+                                        font-size: 1.2rem;
+                                        font-weight: bold;
+                                        white-space: nowrap;
+                                        transform: scaleX(1);"> 
+                                        <strong><%= filme.titulo %> - <%= filme.ano %></strong>
+                                    </h5>
                                 </div>
                             </div>
                         </div>
+                        
+                        
                     </div>
                 <% }) %>
             <% } else { %>

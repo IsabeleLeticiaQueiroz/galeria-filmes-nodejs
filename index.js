@@ -4,12 +4,11 @@ import path from 'path';
 const app = express()
 
 //importar modelos
+import setAssociations from './Models/Relacao.js'
 import Usuarios from './Models/Usuario.js';
 import Filmes from './Models/Filme.js';
 import Usuariosxfilmes from './Models/Usuarioxfilme.js';
 
-// Definir as associações
-import './Models/Usuarioxfilme.js';  
 
 //importar controllers
 import FilmesController from './Controllers/FilmesController.js';
@@ -47,6 +46,8 @@ app.use('/Imgs', express.static('Imgs'));
 app.use("/", UsuariosController);
 app.use("/", FilmesController);
 app.use("/", UsuariosxfilmesController);
+
+setAssociations();
 
 // Realizando a conexão com o banco de dados
 connection.authenticate().then(() => {

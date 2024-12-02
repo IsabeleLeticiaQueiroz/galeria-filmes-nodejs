@@ -2,7 +2,8 @@ import express from "express";
 import Users from "../Models/Usuario.js";
 import bcrypt from "bcrypt";
 import Usuariosxfilmes from "../Models/Usuarioxfilme.js"; // Importa a tabela de associação
-import Filmes from "../Models/Filme.js"; // Importa o modelo Filmes
+import Usuarios from "../Models/Usuario.js";
+import Filme from "../Models/Filme.js"; // Importa o modelo Filmes
 import flash from "connect-flash";
 import { verificarLogin } from '../Middleware/Auth.js';  
 
@@ -121,28 +122,29 @@ router.get("/logout", (req, res) => {
 // Rota de perfil com o middleware verificarLogin
 router.get("/perfil", verificarLogin, async (req, res) => {
     try {
-        // Consulta os filmes que o usuário tem usando Eager Loading
-        const filmes = await Filmes.findAll({
+        // Consulta os filmes relacionados ao usuário
+        const filmes = await Filme.findAll({
             include: {
-                model: Usuariosxfilmes,
-                where: { id_usu: req.session.user.id },
-                through: { attributes: [] }  // Evita carregar os dados da tabela intermediária
+                model: Usuarios, // Inclua o modelo relacionado (Usuarios)
+                where: { id_usu: req.session.user.id }, // Filtra pelo usuário logado
+                through: { attributes: [] } // Evita carregar os dados da tabela intermediária
             }
         });
 
         // Renderiza a view de perfil e passa os dados necessários
         res.render("perfil", {
-            filmes: filmes,  // Passa a lista de filmes
-            user: req.session.user,  // Passa as informações do usuário
+            filmes: filmes, // Passa a lista de filmes
+            user: req.session.user, // Passa as informações do usuário
             successMessage: req.flash("success"),
             errorMessage: req.flash("error"),
             infoMessage: req.flash("info")
         });
     } catch (error) {
-        console.log("Erro ao carregar perfil:", error);
+        console.error("Erro ao carregar perfil:", error);
         req.flash("error", "Erro ao carregar seu perfil. Tente novamente mais tarde.");
         return res.redirect("/inicial");
     }
 });
+
 
 export default router;
