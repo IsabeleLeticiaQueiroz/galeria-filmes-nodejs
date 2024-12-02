@@ -86,7 +86,7 @@ router.post("/authenticate", async (req, res) => {
         });
 
         if (user != null) {
-            // Verifica se a senha informada está correta
+
             const correct = bcrypt.compareSync(senha, user.senha);
 
             if (correct) {
@@ -96,7 +96,7 @@ router.post("/authenticate", async (req, res) => {
                 };
 
                 req.flash("success", `Bem-vindo, ${user.email}!`);
-                res.redirect("/inicial"); // Redireciona para a página de filmes ou outra página inicial
+                res.redirect("/inicial"); 
             } else {
                 req.flash("error", "A senha informada está incorreta. Tente novamente!");
                 res.redirect("/login");
@@ -114,27 +114,26 @@ router.post("/authenticate", async (req, res) => {
 
 // ROTA DE LOGOUT
 router.get("/logout", (req, res) => {
-    req.session.user = undefined; // Limpa a sessão do usuário
+    req.session.user = undefined; 
     req.flash("success", "Logout efetuado com sucesso!");
-    res.redirect("/"); // Redireciona para a página inicial
+    res.redirect("/"); 
 });
 
-// Rota de perfil com o middleware verificarLogin
+// Rota de perfil 
 router.get("/perfil", verificarLogin, async (req, res) => {
     try {
-        // Consulta os filmes relacionados ao usuário
+
         const filmes = await Filme.findAll({
             include: {
-                model: Usuarios, // Inclua o modelo relacionado (Usuarios)
-                where: { id_usu: req.session.user.id }, // Filtra pelo usuário logado
-                through: { attributes: [] } // Evita carregar os dados da tabela intermediária
+                model: Usuarios, 
+                where: { id_usu: req.session.user.id }, 
+                through: { attributes: [] } 
             }
         });
 
-        // Renderiza a view de perfil e passa os dados necessários
         res.render("perfil", {
-            filmes: filmes, // Passa a lista de filmes
-            user: req.session.user, // Passa as informações do usuário
+            filmes: filmes, 
+            user: req.session.user, 
             successMessage: req.flash("success"),
             errorMessage: req.flash("error"),
             infoMessage: req.flash("info")
